@@ -1,5 +1,6 @@
 clear;clc; close all; rng(1);
 sampleSize = 50;
+limit = 2;
 %% Kernel PCA on circular DATA
 % In this code, we have generated some circular data with some noise (2D data)
 % We will perform kernel PCA on this data using gaussian and polynomial
@@ -30,33 +31,29 @@ EigvalsG=diag(EG);
 [~,IX]=sort(EigvalsG,'descend');
 VecG=VG(:,IX);
 EigvalsG = EigvalsG(IX);
+VecG = VecG(:, 1:limit);
+EigvalsG = EigvalsG(1:limit);
 
 EigvalsP=diag(EP);
 [~,IX]=sort(EigvalsP,'descend');
 VecP=VP(:,IX);
 EigvalsP = EigvalsP(IX);
+VecP = VecP(:, 1:limit);
+EigvalsP = EigvalsP(1:limit);
 
 
 
 %% Perform Normalization
 % For gaussian kernel:
-div=sqrt(sum(VecG.^2));
-VecG=VecG./repmat(div,size(VecG,1),1);
+div=sqrt(EigvalsG);
+VecG=VecG./(div*ones(1,N))';
 % For polynomial kernel
-div=sqrt(sum(VecP.^2));
-VecP=VecP./repmat(div,size(VecP,1),1);
+div=sqrt(EigvalsP);
+VecP=VecP./(div*ones(1,N))';
 % 
 %% Transform Data into new dimensions (along the best d eigenvectors)
-d = 2;
-eigVecsNewG = VecG(:, 1:d);
-eigVecsNewP = VecP(:, 1:d);
-YG = K_gaussian * eigVecsNewG;
-YP = K_polynomial * eigVecsNewP;%% Transform Data into new dimensions (along the best d eigenvectors)
-d = 2;
-eigVecsNewG = VecG(:, 1:d);
-eigVecsNewP = VecP(:, 1:d);
-YG = KG * eigVecsNewG;
-YP = KP * eigVecsNewP;
+YG = projectData(VecG, KG, 2);
+YP = projectData(VecP, KP, 2);
 
 %% Plot the Gaussian kernal data
 figure(2);
