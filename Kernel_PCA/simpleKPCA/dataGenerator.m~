@@ -1,8 +1,0 @@
-% Generate circular data of three different radii
-% r = 2, 5, 8
-Data2 = zeros(500,1);
-Data5 = zeros(500,1);
-Data8 = zeros(500,1);
-% generate 500 points each
-for i = [1:500]:
-    
