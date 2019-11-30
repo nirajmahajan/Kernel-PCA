@@ -1,6 +1,6 @@
 %% Data Generator Function
 % Function to generate a circular dataset with some added gaussian noise
-function [X, Y] = dataGenerator(draw, sampleSize)
+function [Data] = dataGenerator(draw, sampleSize)
     %% Declare constants
     % Generate circular data of three different radii
     % r = 0, 3, 6
@@ -48,4 +48,5 @@ function [X, Y] = dataGenerator(draw, sampleSize)
     %% Return the data values
     X = [Data2(:,1); Data5(:,1); Data8(:, 1)];
     Y = [Data2(:,2); Data5(:,2); Data8(:, 2)];
+    Data = [X Y];
 end
