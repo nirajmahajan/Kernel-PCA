@@ -1,6 +1,7 @@
-% A standard gaussian kernel
+%% Polynomial Kernel
+% A standard polynomial kernel
 function [val] = polynomialKernel(x,y)
-    p = 3;
-    val = (1+x'*y)^p;
+    p = 2;
+    val = (1+sum(x.*y))^p;
 end
 

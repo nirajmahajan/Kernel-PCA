@@ -1,7 +1,15 @@
 %% Generates the Centred Kernel Matrix
 % The input data can be non centred
-function [KNC] = kernelMatrixCalculator(data, kernelFunc)
+function [KNC] = kernelMatrixCalculator(data, type)
     %% Calculate K for centred data
+    if(strcmp(type, 'poly'))
+        kernelFunc = @polynomialKernel;
+    end
+    if(strcmp(type, 'gauss'))
+        kernelFunc = @gaussianKernel;
+    end
+    
+ 
     [row, ~] = size(data);
     K = zeros(row, row);
     for i = 1:row
