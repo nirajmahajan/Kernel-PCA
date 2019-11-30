@@ -1,0 +1,3 @@
+Kernel PCA
+http://www.face-rec.org/algorithms/Kernel/kernelPCA_scholkopf.pdf
+http://www.cs.haifa.ac.il/~rita/uml_course/lectures/KPCA.pdf
