@@ -13,7 +13,7 @@ dataset = dataGenerator(true, sampleSize);
 %% Create the Kernel Matrix from uncentered Data
 KG = kernelMatrixCalculator(dataset, 'gauss');
 [N, ~] = size(dataset);
-oneN=ones(N,N)/N;
+oneN=ones(N)/N;
 K_gaussian=KG-oneN*KG-KG*oneN+oneN*KG*oneN;
 
 K_gaussian = (K_gaussian + K_gaussian')/2;
@@ -23,9 +23,17 @@ K_polynomial=KP-oneN*KP-KP*oneN+oneN*KP*oneN;
 
 K_polynomial = (K_polynomial + K_polynomial')/2;
 
+%% Perform Normalisation on matrices
+K_polynomial = K_polynomial / N;
+K_gaussian = K_gaussian / N;
+
+K_polynomial = K_polynomial ./ repmat(std(K_polynomial), N, 1);
+K_gaussian = K_gaussian ./ repmat(std(K_gaussian), N, 1);
+
+
 %% Perform SVD
-[VG, EG] = eig(K_gaussian/N);
-[VP, EP] = eig(K_polynomial/N);
+[VG, EG] = eig(K_gaussian);
+[VP, EP] = eig(K_polynomial);
 
 EigvalsG=diag(EG);
 [~,IX]=sort(EigvalsG,'descend');
@@ -70,6 +78,7 @@ xlabel('First Component');
 ylabel('Second Component');
 title('Gaussian Kernel');
 hold off;
+
 
 %% Plot the Polynomial kernal data
 figure(3);

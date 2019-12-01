@@ -3,13 +3,13 @@
 function [Data] = dataGenerator(draw, sampleSize)
     %% Declare constants
     % Generate circular data of three different radii
-    % r = 1, 5, 9
+    % r = 1, 10, 100
     Data2 = zeros(sampleSize,2);
     Data5 = zeros(sampleSize,2);
     Data8 = zeros(sampleSize,2);
-    r1 = 1;
-    r2 = 5;
-    r3 = 9;
+    r1 = 0;
+    r2 = 3;
+    r3 = 6;
     
     %% Generate data
     % Generate 200 points each by uniformly drawing theta values
