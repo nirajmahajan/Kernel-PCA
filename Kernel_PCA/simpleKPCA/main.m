@@ -1,5 +1,5 @@
 clear;clc; close all; rng(1);
-sampleSize = 50;
+sampleSize = 400;
 limit = 2;
 %% Kernel PCA on circular DATA
 % In this code, we have generated some circular data with some noise (2D data)
