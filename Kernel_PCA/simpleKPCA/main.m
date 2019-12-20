@@ -9,59 +9,9 @@ limit = 2;
 %% Generate Data
 dataset = dataGenerator(true, sampleSize);
 
-
-%% Create the Kernel Matrix from uncentered Data
-KG = kernelMatrixCalculator(dataset, 'gauss');
-[N, ~] = size(dataset);
-oneN=ones(N)/N;
-K_gaussian=KG-oneN*KG-KG*oneN+oneN*KG*oneN;
-
-K_gaussian = (K_gaussian + K_gaussian')/2;
-
-KP = kernelMatrixCalculator(dataset, 'poly');
-K_polynomial=KP-oneN*KP-KP*oneN+oneN*KP*oneN;
-
-K_polynomial = (K_polynomial + K_polynomial')/2;
-
-%% Perform Normalisation on matrices
-K_polynomial = K_polynomial / N;
-K_gaussian = K_gaussian / N;
-
-K_polynomial = K_polynomial ./ repmat(std(K_polynomial), N, 1);
-K_gaussian = K_gaussian ./ repmat(std(K_gaussian), N, 1);
-
-
-%% Perform SVD
-[VG, EG] = eig(K_gaussian);
-[VP, EP] = eig(K_polynomial);
-
-EigvalsG=diag(EG);
-[~,IX]=sort(EigvalsG,'descend');
-VecG=VG(:,IX);
-EigvalsG = EigvalsG(IX);
-VecG = VecG(:, 1:limit);
-EigvalsG = EigvalsG(1:limit);
-
-EigvalsP=diag(EP);
-[~,IX]=sort(EigvalsP,'descend');
-VecP=VP(:,IX);
-EigvalsP = EigvalsP(IX);
-VecP = VecP(:, 1:limit);
-EigvalsP = EigvalsP(1:limit);
-
-
-
-%% Perform Normalization
-% For gaussian kernel:
-div=sqrt(EigvalsG);
-VecG=VecG./(div*ones(1,N))';
-% For polynomial kernel
-div=sqrt(EigvalsP);
-VecP=VecP./(div*ones(1,N))';
-% 
-%% Transform Data into new dimensions (along the best d eigenvectors)
-YG = projectData(VecG, KG, 2);
-YP = projectData(VecP, KP, 2);
+%% Perform kernel PCA
+[YG, ISG]= kpca(dataset, 'gaussian', 3, 2);
+[YP, ISP]= kpca(dataset, 'polynomial', 2, 2);
 
 %% Plot the Gaussian kernal data
 figure(2);
@@ -92,3 +42,39 @@ xlabel('First Component');
 ylabel('Second Component');
 title('Polynomial Kernel');
 hold off;
+
+%% Draw and plot pre-images for Gaussian
+n = 3;
+pre_images_gaussian = zeros(size(dataset));
+for i = 1:length(YG)
+    pre_images_gaussian(i,:) = invert(YG(i,:)', ISG, n)';
+end
+figure(4);
+scatter(pre_images_gaussian(1:a,1), pre_images_gaussian(1:a,2), 'r');
+hold on;
+scatter(pre_images_gaussian(a+1:b,1), pre_images_gaussian(a+1:b,2), 'g');
+hold on;
+scatter(pre_images_gaussian(b+1:c,1), pre_images_gaussian(b+1:c,2), 'b');
+hold on;
+xlabel('X');
+ylabel('Y');
+title('Gaussian Kernel Pre Images');
+hold off;
+
+
+% %% Draw and plot pre-images for Polynomial
+% pre_images_poly = zeros(size(dataset));
+% for i = 1:length(YG)
+%     pre_images_poly(i,:) = invert(YP(i,:)', dataset, YP, n)';
+% end
+% figure(5);
+% scatter(pre_images_poly(1:a,1), pre_images_poly(1:a,2), 'r');
+% hold on;
+% scatter(pre_images_poly(a+1:b,1), pre_images_poly(a+1:b,2), 'g');
+% hold on;
+% scatter(pre_images_poly(b+1:c,1), pre_images_poly(b+1:c,2), 'b');
+% hold on;
+% xlabel('X');
+% ylabel('Y');
+% title('Polynomial Kernel Pre Images');
+% hold off;
