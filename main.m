@@ -10,8 +10,9 @@ limit = 2;
 dataset = dataGenerator(true, sampleSize);
 
 %% Perform kernel PCA
-[YG, ISG]= kpca(dataset, 'gaussian', 3, 2);
-[YP, ISP]= kpca(dataset, 'polynomial', 2, 2);
+[YG, ISG]= kpca(dataset, 'gaussian', 40, 2);
+[YP, ISP]= kpca(dataset, 'polynomial', 2.413, 2);
+% YG = YP;
 
 %% Plot the Gaussian kernal data
 figure(2);
@@ -47,7 +48,7 @@ hold off;
 n = 3;
 pre_images_gaussian = zeros(size(dataset));
 for i = 1:length(YG)
-    pre_images_gaussian(i,:) = invert(YG(i,:)', ISG, n)';
+    pre_images_gaussian(i,:) = invert(YG(i,:)', dataset, YG, n)';
 end
 figure(4);
 scatter(pre_images_gaussian(1:a,1), pre_images_gaussian(1:a,2), 'r');
@@ -56,6 +57,8 @@ scatter(pre_images_gaussian(a+1:b,1), pre_images_gaussian(a+1:b,2), 'g');
 hold on;
 scatter(pre_images_gaussian(b+1:c,1), pre_images_gaussian(b+1:c,2), 'b');
 hold on;
+mean_image = invert(mean(YG)', dataset, YG, n)';
+scatter(mean_image(1), mean_image(2), 'd', 'MarkerFaceColor', 'y')
 xlabel('X');
 ylabel('Y');
 title('Gaussian Kernel Pre Images');

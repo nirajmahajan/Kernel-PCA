@@ -8,24 +8,25 @@ function [Data] = dataGenerator(draw, sampleSize)
     Data5 = zeros(sampleSize,2);
     Data8 = zeros(sampleSize,2);
     r1 = 0;
-    r2 = 5;
-    r3 = 10;
+    r2 = 50;
+    r3 = 100;
+    div = 1/5;
     
     %% Generate data
     % Generate 200 points each by uniformly drawing theta values
     for i = 1:sampleSize
         ang1 = pi*rand()*2;
-        rad1 = r1 + randn()/4;
+        rad1 = r1 + randn()/div;
         Data2(i,1) = rad1*cos(ang1);
         Data2(i,2) = rad1*sin(ang1);
 
         ang2 = pi*rand()*2;
-        rad2 = r2 + randn()/4;
+        rad2 = r2 + randn()/div;
         Data5(i,1) = rad2*cos(ang2);
         Data5(i,2) = rad2*sin(ang2);
 
         ang3 = pi*rand()*2;
-        rad3 = r3 + randn()/4;
+        rad3 = r3 + randn()/div;
         Data8(i,1) = rad3*cos(ang3);
         Data8(i,2) = rad3*sin(ang3);
     end
